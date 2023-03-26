@@ -222,27 +222,243 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public void Check(Vector2Int pieceIndex)
+    public  bool Check(int player,Vector2Int pieceindex,Vector2Int choicedIndex)
     {
-        PieceRangeV = Constants.PieceDictionary.MovingRange[board[pieceIndex.y, pieceIndex.x].Substring(0, 1)];
-        foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+        if(player == 0)
         {
-            Debug.Log(board[pieceIndex.y, Math.Abs(vector2Int.y)]);
-            if (vector2Int.x == 0)
+            PieceRangeV = Constants.PieceDictionary.MovingRange[board[pieceindex.y, pieceindex.x].Substring(0, 1)];
+            switch(PieceRangeV.Case)
             {
-                if(board[pieceIndex.y, Math.Abs(vector2Int.y)] == Constants.Pieces.SPACE + Constants.Pieces.SPACE)
-                {
-                    board[pieceIndex.y, vector2Int.y] += "O";
-                }
-            }
-            if (vector2Int.y == 0)
-            {
-                if (board[pieceIndex.y, Math.Abs(vector2Int.y)] == Constants.Pieces.SPACE + Constants.Pieces.SPACE)
-                {
-                    board[pieceIndex.y, vector2Int.y] += "O";
-                }
+                case 0:
+                    foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        if (pieceindex + -vector2Int == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                    }
+                    //Debug.Log("false");
+                    return false;
+                case 1:
+                    foreach(Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        for (int i = 0; i <= Math.Abs(vector2Int.y); i++)
+                        {
+                            if(Math.Sign(vector2Int.y) == 1)
+                            {
+                                if (pieceindex.y + i == choicedIndex.y)
+                                {
+                                    y = true;
+                                    //Debug.Log(y);
+                                }
+                            }
+                            else if (Math.Sign(vector2Int.y) == -1)
+                            {
+                                if (pieceindex.y + -i == choicedIndex.y)
+                                {
+                                    y = true;
+                                    //Debug.Log(y);
+                                }
+                            }
+                        }
+                        for (int i2 = 0; i2 <= Math.Abs(vector2Int.x); i2++)
+                        {
+                            if(Math.Sign(vector2Int.x) == 1)
+                            {
+                                if (pieceindex.x + -i2 == choicedIndex.x)
+                                {
+                                    x = true;
+                                    //Debug.Log(x);
+                                }
+                            }
+                            if (Math.Sign(vector2Int.x) == -1)
+                            {
+                                if (pieceindex.x + i2 == choicedIndex.x)
+                                {
+                                    x = true;
+                                    //Debug.Log(x);
+                                }
+                            }
+                        }
+                    }
+                    if (y == true && x == true)
+                    {
+                        //Debug.Log("true");
+                        y = false;
+                        x = false;
+                        return true;
+                    }
+                    else
+                    {
+                        //Debug.Log("false");
+                        y = false;
+                        x = false;
+                        return false;
+                    }
+                case 2:
+                    if(pieceindex.x == 6)
+                    {
+                        if (pieceindex + -PieceRangeV.vector2Ints[0] == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                        else
+                        {
+                            //Debug.Log("false");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (pieceindex + -PieceRangeV.vector2Ints[1] == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                        else
+                        {
+                            //Debug.Log("false");
+                            return false;
+                        }
+                    }
+                case 3:
+                    foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        if (pieceindex + -vector2Int == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                    }
+                    //Debug.Log("false");
+                    return false;
             }
         }
+        else if (player == 1)
+        {
+            PieceRangeV = Constants.PieceDictionary.MovingRange[board[pieceindex.y, pieceindex.x].Substring(0, 1)];
+            switch (PieceRangeV.Case)
+            {
+                case 0:
+                    foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        if (pieceindex + vector2Int == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                    }
+                    //Debug.Log("false");
+                    return false;
+                case 1:
+                    foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        //Debug.Log(Math.Abs(vector2Int.y));
+                        //Debug.Log(Math.Abs(vector2Int.x));
+                        for (int i = 0; i <= Math.Abs(vector2Int.y); i++)
+                        {
+                            //Debug.Log(i);
+                            if (Math.Sign(vector2Int.y) == 1)
+                            {
+                                if (pieceindex.y + -i == choicedIndex.y)
+                                {
+                                    y = true;
+                                    //Debug.Log(y);
+                                }
+                            }
+                            if (Math.Sign(vector2Int.y) == -1)
+                            {
+                                if (pieceindex.y + i == choicedIndex.y)
+                                {
+                                    y = true;
+                                    //Debug.Log(y);
+                                }
+                            }
+                        }
+                        for (int i2 = 0; i2 <= Math.Abs(vector2Int.x); i2++)
+                        {
+                            //Debug.Log(i2);
+                            if (Math.Sign(vector2Int.x) == 1)
+                            {
+                                if (pieceindex.x + -i2 == choicedIndex.x)
+                                {
+                                    x = true;
+                                    //Debug.Log(x);
+                                }
+                            }
+                            if (Math.Sign(vector2Int.x) == -1)
+                            {
+                                if (pieceindex.x + i2 == choicedIndex.x)
+                                {
+                                    x = true;
+                                    //Debug.Log(x);
+                                }
+                            }
+                        }
+                    }
+                    if (y == true && x == true)
+                    {
+                        //Debug.Log("true");
+                        y = false;
+                        x = false;
+                        return true;
+                    }
+                    else
+                    {
+                        //Debug.Log("false");
+                        y = false;
+                        x = false;
+                        return false;
+                    }
+                case 2:
+                    if (pieceindex.x == 6)
+                    {
+                        if (pieceindex + PieceRangeV.vector2Ints[0] == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                        else
+                        {
+                            //Debug.Log("false");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (pieceindex + PieceRangeV.vector2Ints[1] == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                        else
+                        {
+                            //Debug.Log("false");
+                            return false;
+                        }
+                    }
+                case 3:
+                    foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+                    {
+                        if (pieceindex + vector2Int == choicedIndex)
+                        {
+                            //Debug.Log("true");
+                            return true;
+                        }
+                    }
+                    //Debug.Log("false");
+                    return false;
+            }
+        }
+        else
+        {
+            //Debug.Log("false");
+            return false;
+        }
+        //Debug.Log("false");
+        return false;
     }
 
     public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
