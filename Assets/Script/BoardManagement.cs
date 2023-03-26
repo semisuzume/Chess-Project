@@ -239,15 +239,6 @@ public class BoardManagement : MonoBehaviour
                 case 1:
                     foreach(Vector2Int vector2Int in PieceRangeV.vector2Ints)
                     {
-                        for(int i = 0; i <= Math.Abs(vector2Int.y); i++)
-                        {
-                            
-                        }
-                        for (int i2 = 0; i2 <= Math.Abs(vector2Int.x); i2++)
-                        {
-                            
-                        }
-
                         for (int i = 0; i <= Math.Abs(vector2Int.y); i++)
                         {
                             if(Math.Sign(vector2Int.y) == 1)
