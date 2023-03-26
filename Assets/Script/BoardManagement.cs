@@ -228,7 +228,7 @@ public class BoardManagement : MonoBehaviour
                 case 0:
                     foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
                     {
-                        if (pieceindex + -vector2Int == choicedIndex)
+                        if (pieceindex + -(vector2Int) == choicedIndex)
                         {
                             //Debug.Log("true");
                             return true;
@@ -322,7 +322,7 @@ public class BoardManagement : MonoBehaviour
                 case 3:
                     foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
                     {
-                        if (pieceindex + -vector2Int == choicedIndex)
+                        if (pieceindex + -(vector2Int) == choicedIndex)
                         {
                             //Debug.Log("true");
                             return true;
@@ -340,7 +340,7 @@ public class BoardManagement : MonoBehaviour
                 case 0:
                     foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
                     {
-                        if (pieceindex + vector2Int == choicedIndex)
+                        if (pieceindex + (vector2Int) == choicedIndex)
                         {
                             //Debug.Log("true");
                             return true;
@@ -438,7 +438,7 @@ public class BoardManagement : MonoBehaviour
                 case 3:
                     foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
                     {
-                        if (pieceindex + vector2Int == choicedIndex)
+                        if (pieceindex + (vector2Int) == choicedIndex)
                         {
                             //Debug.Log("true");
                             return true;
