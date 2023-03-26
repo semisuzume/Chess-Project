@@ -28,7 +28,6 @@ public class GameManagement : MonoBehaviour
                 if (pieceIndex.x < 0 || pieceIndex.y < 0)
                 {
                     pieceIndex = selectPiece.GetComponent<Piece>().Select();
-                    boardManagement.Check(pieceIndex);
                     if (!boardManagement.CheckTurn(player, pieceIndex))
                     {
                         ResetIndex(0);
