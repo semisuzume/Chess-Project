@@ -230,7 +230,7 @@ public class BoardManagement : MonoBehaviour
                     {
                         if (pieceindex + -(vector2Int) == choicedIndex)
                         {
-                            Debug.Log("true");
+                            //Debug.Log("true");
                             return true;
                         }
                     }
