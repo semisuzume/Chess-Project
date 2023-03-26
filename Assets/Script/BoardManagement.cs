@@ -200,11 +200,15 @@ public class BoardManagement : MonoBehaviour
     public bool ChoicedCheck(int player, Vector2Int choicedIndex)
     {
         string piece = board[choicedIndex.y, choicedIndex.x];
-        if (piece == "SS")
+        if (piece == "SSO")
         {
             return true;
         }
-        if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
+        else if(piece == "SS")
+        {
+            return true;
+        }
+        else if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
         {
             return false;
         }
@@ -218,17 +222,35 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public bool Check(Vector2Int pieceIndex)
+    public void Check(Vector2Int pieceIndex)
     {
-
+        PieceRangeV = Constants.PieceDictionary.MovingRange[board[pieceIndex.y, pieceIndex.x].Substring(0, 1)];
+        foreach (Vector2Int vector2Int in PieceRangeV.vector2Ints)
+        {
+            Debug.Log(board[pieceIndex.y, Math.Abs(vector2Int.y)]);
+            if (vector2Int.x == 0)
+            {
+                if(board[pieceIndex.y, Math.Abs(vector2Int.y)] == Constants.Pieces.SPACE + Constants.Pieces.SPACE)
+                {
+                    board[pieceIndex.y, vector2Int.y] += "O";
+                }
+            }
+            if (vector2Int.y == 0)
+            {
+                if (board[pieceIndex.y, Math.Abs(vector2Int.y)] == Constants.Pieces.SPACE + Constants.Pieces.SPACE)
+                {
+                    board[pieceIndex.y, vector2Int.y] += "O";
+                }
+            }
+        }
     }
 
     public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
     {
-            string selectedPieceString = board[pieceIndex.y, pieceIndex.x];
-            board[pieceIndex.y, pieceIndex.x] = "SS";
-            board.SetValue(selectedPieceString, choicedIndex.y, choicedIndex.x);
-            //BoardPrint();
-            GeneratePiece();
+        string selectedPieceString = board[pieceIndex.y, pieceIndex.x];
+        board[pieceIndex.y, pieceIndex.x] = "SS";
+        board.SetValue(selectedPieceString, choicedIndex.y, choicedIndex.x);
+        //BoardPrint();
+        GeneratePiece();
     }
 }
