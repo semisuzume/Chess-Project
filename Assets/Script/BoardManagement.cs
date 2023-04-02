@@ -20,7 +20,7 @@ public class BoardManagement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     /// <summary>
     /// ”Õ–Ê‚Ì”z’u‚Ìó‹µ‚ğ‰Šúó‘Ô‚É–ß‚·
@@ -31,7 +31,7 @@ public class BoardManagement : MonoBehaviour
         {
             for (int X = 0; X < board.GetLength(1); X++)
             {
-                if((Y == 7) && (X == 0))
+                if ((Y == 7) && (X == 0))
                 {
                     board[Y, X] = "L1W";
                 }
@@ -39,7 +39,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "L2W";
                 }
-                else if((Y == 7) && (X == 1))
+                else if ((Y == 7) && (X == 1))
                 {
                     board[Y, X] = "N1W";
                 }
@@ -47,7 +47,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "N2W";
                 }
-                else if((Y == 7) && (X == 2))
+                else if ((Y == 7) && (X == 2))
                 {
                     board[Y, X] = "B1W";
                 }
@@ -55,7 +55,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "B2W";
                 }
-                else if((Y == 7) && (X == 3))
+                else if ((Y == 7) && (X == 3))
                 {
                     board[Y, X] = "K1W";
                 }
@@ -96,11 +96,11 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "K2B";
                 }
-                else if(Y == 6)
+                else if (Y == 6)
                 {
                     board[Y, X] = "P" + (X + 1).ToString() + "W";
                 }
-                else if(Y == 1)
+                else if (Y == 1)
                 {
                     board[Y, X] = "P" + (X + 1).ToString() + "B";
                 }
@@ -114,7 +114,7 @@ public class BoardManagement : MonoBehaviour
 
     void GeneratePiece()
     {
-        foreach(GameObject destroyPiece in GameObject.FindGameObjectsWithTag("chesspiece"))
+        foreach (GameObject destroyPiece in GameObject.FindGameObjectsWithTag("chesspiece"))
         {
             Destroy(destroyPiece);
         }
@@ -162,7 +162,7 @@ public class BoardManagement : MonoBehaviour
     /// </summary>
     void BoardPrint()
     {
-        for(int Y= 0; Y < board.GetLength(0); Y++)
+        for (int Y = 0; Y < board.GetLength(0); Y++)
         {
             string printString = "";
             for (int X = 0; X < board.GetLength(1); X++)
@@ -176,7 +176,7 @@ public class BoardManagement : MonoBehaviour
     public bool CheckTurn(int player, Vector2Int index)
     {
         string piece = board[index.y, index.x];
-        if(piece == "SS")
+        if (piece == "SS")
         {
             return false;
         }
@@ -197,7 +197,7 @@ public class BoardManagement : MonoBehaviour
     public bool ChoicedCheck(int player, Vector2Int choicedIndex)
     {
         string piece = board[choicedIndex.y, choicedIndex.x];
-        if(piece == "SS")
+        if (piece == "SS")
         {
             return true;
         }
@@ -215,9 +215,35 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    
+    public bool BoardCheck(Vector2Int now, Vector2Int next)
+    {
+        if (board[now.y, now.x].Substring(0, 1) == "K")
+        {
+            return CheckKing(now, next);
+        }
+        return true;
+    }
 
-    public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
+    private bool CheckKing(Vector2Int frm, Vector2Int to)
+    {
+        // ###
+        // #@#
+        // ###
+        for (int di = -1; di <= 1; di++)
+        {
+            for (int dj = -1; dj <= 1; dj++)
+            {
+                if (frm + new Vector2Int(di, dj) == to)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
     {
         string selectedPieceString = board[pieceIndex.y, pieceIndex.x];
         board[pieceIndex.y, pieceIndex.x] = "SS";
