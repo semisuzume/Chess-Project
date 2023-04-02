@@ -215,7 +215,10 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    
+    public bool BoardCheck(Vector2Int now,Vector2Int next)
+    {
+        return true;
+    }
 
     public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
     {

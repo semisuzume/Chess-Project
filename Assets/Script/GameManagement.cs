@@ -42,9 +42,12 @@ public class GameManagement : MonoBehaviour
                     //Debug.Log(choicedIndex);
                     if (boardManagement.ChoicedCheck(player, choicedIndex))
                     {
-                        boardManagement.MovePiece(pieceIndex, choicedIndex);
-                        ResetIndex();
-                        ChangePlayer();
+                        if(boardManagement.BoardCheck(pieceIndex,choicedIndex))
+                        {
+                            boardManagement.MovePiece(pieceIndex, choicedIndex);
+                            ResetIndex();
+                            ChangePlayer();
+                        }
                     }
                     else
                     {
