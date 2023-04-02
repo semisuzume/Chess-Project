@@ -217,7 +217,30 @@ public class BoardManagement : MonoBehaviour
 
     public bool BoardCheck(Vector2Int now,Vector2Int next)
     {
-        return true;
+        if(board[now.y,now.x] == "K")
+        {
+            return CheckKing(now, next);
+        }
+        return false;
+    }
+
+    private bool CheckKing(Vector2Int frm, Vector2Int to)
+    {
+        // ###
+        // #@#
+        // ###
+        for (int di = -1; di <= 1; di++)
+        {
+            for (int dj = -1; dj <= 1; dj++)
+            {
+                if (frm + new Vector2Int(di, dj) == to)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
