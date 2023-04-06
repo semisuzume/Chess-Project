@@ -215,7 +215,122 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    
+    private bool CheckKing(Vector2Int frm, Vector2Int to)
+    {
+        /*
+			###
+			#@#
+			###
+		*/
+        for (int di = -1; di <= 1; di++)
+        {
+            for (int dj = -1; dj <= 1; dj++)
+            {
+                if (frm + new Vector2Int(di, dj) == to)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool Direct(int sign_x, int sign_y, Vector2Int frm, Vector2Int to)
+    {
+        for (int d = 0; d < 8; d++)
+        {
+            Vector2Int movePos = frm + new Vector2Int(sign_x * d, sign_y * d);
+            if (!(0 <= movePos.x && movePos.x < 8 && 0 <= movePos.y && movePos.y < 8))
+            {
+                break;
+            }
+
+            if (movePos == to)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool CheckQueen(Vector2Int frm,Vector2Int to)
+    {
+        bool flg = false;
+
+        for (int direct = 0; direct < 8; direct++)
+        {
+            //direct 0~7
+            int radian = direct * 45;
+            //Debug.Log(radian);
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            //Debug.Log(sign_x.ToString() + ", " + sign_y.ToString());
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckLuek(Vector2Int frm, Vector2Int to)
+    {
+        bool flg = false;
+
+        for (int direct = 0; direct < 4; direct++)
+        {
+            int radian = direct * 90;
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckBISHOP(Vector2Int frm,Vector2Int to)
+    {
+        bool flg = false;
+
+        for(int direct = 1;direct < 8;direct+= 2)
+        {
+            int radian = direct * 45;
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckKnight(Vector2Int frm, Vector2Int to)
+    {
+        for (int di = -2; di <= 2; di++)
+        {
+            for (int dj = -2; dj <= 2; dj++)
+            {
+                if(Math.Abs(di) == Math.Abs(dj))
+                {
+                    Debug.Log(Math.Abs(di) == Math.Abs(dj));
+                    break;
+                }
+                else if (frm + new Vector2Int(di, dj) == to)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool CheckPawn(Vector2Int frm, Vector2Int to)
+    {
+        if(frm + new Vector2Int(0,1) == to)
+        {
+            return true;
+        }
+        return false;
+    }
 
     public void MovePiece(Vector2Int pieceIndex,Vector2Int choicedIndex)
     {
