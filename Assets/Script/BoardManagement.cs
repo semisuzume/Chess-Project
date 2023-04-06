@@ -215,9 +215,9 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public bool CheckMovePoss(Vector2Int pieceIndex, Vector2Int frm, Vector2Int to)
+    public bool CheckMovePoss(Vector2Int frm, Vector2Int to)
     {
-        switch(board[pieceIndex.y,pieceIndex.x].Substring(0,1))
+        switch(board[frm.y,frm.x].Substring(0,1))
         {
             case "K":
                 return CheckKing(frm, to);
