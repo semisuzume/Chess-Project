@@ -215,6 +215,26 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
+    public bool CheckMovePoss(string jobTitle, Vector2Int frm, Vector2Int to)
+    {
+        switch(jobTitle)
+        {
+            case "K":
+                return CheckKing(frm, to);
+            case "Q":
+                return CheckQueen(frm, to);
+            case "L":
+                return CheckLuek(frm, to);
+            case "B":
+                return CheckBISHOP(frm, to);
+            case "N":
+                return CheckKnight(frm, to);
+            case "P":
+                return CheckPawn(frm, to);
+        }
+        return false;
+    }
+
     private bool CheckKing(Vector2Int frm, Vector2Int to)
     {
         /*
