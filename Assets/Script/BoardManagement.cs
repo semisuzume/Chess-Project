@@ -194,25 +194,47 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public bool ChoicedCheck(int player, Vector2Int choicedIndex)
+    public bool ChoicedCheck(int player, int Case, Vector2Int choicedIndex)
     {
-        string piece = board[choicedIndex.y, choicedIndex.x];
-        if (piece == "SS")
+        switch(Case)
         {
-            return true;
+            case 0:
+                string piece = board[choicedIndex.y, choicedIndex.x];
+                if (piece == "SS")
+                {
+                    return true;
+                }
+                else if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
+                {
+                    return false;
+                }
+                else if (player == 1 && piece.Substring(2, 1) == Constants.Pieces.BLACK)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            case 1:
+                piece = board[choicedIndex.y, choicedIndex.x];
+                if (!(piece == "SS"))
+                {
+                    if (player == 0 && piece.Substring(2, 1) != Constants.Pieces.WHITE)
+                    {
+                        if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if(piece == "SS")
+                {
+                    return true;
+                }
+                break;
         }
-        else if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
-        {
-            return false;
-        }
-        else if (player == 1 && piece.Substring(2, 1) == Constants.Pieces.BLACK)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return false;
     }
 
     public bool CheckMovePoss(int player, Vector2Int frm, Vector2Int to)
@@ -359,15 +381,45 @@ public class BoardManagement : MonoBehaviour
             case 0:
                 if (frm + new Vector2Int(0, -1) == to)
                 {
-                    Debug.Log("true");
-                    return true;
+                    if(ChoicedCheck(player,1,to))
+                    {
+                        Debug.Log("true");
+                        return true;
+                    }
+                }
+                else
+                {
+                    //1 ~ -1
+                    for (int di = -1;di <= 1;di += 2)
+                    {
+                        if(frm + new Vector2Int(di,-1)== to)
+                        {
+                            Debug.Log("true");
+                            return true;
+                        }
+                    }
                 }
                 return false;
             case 1:
                 if (frm + new Vector2Int(0, 1) == to)
                 {
-                    Debug.Log("true");
-                    return true;
+                    if (ChoicedCheck(player, 1, to))
+                    {
+                        Debug.Log("true");
+                        return true;
+                    }
+                }
+                else
+                {
+                    //1 ~ -1
+                    for (int di = -1; di <= 1; di += 2)
+                    {
+                        if (frm + new Vector2Int(di, 1) == to)
+                        {
+                            Debug.Log("true");
+                            return true;
+                        }
+                    }
                 }
                 return false;
         }

@@ -40,7 +40,7 @@ public class GameManagement : MonoBehaviour
                     choicedIndex = selectPiece.GetComponent<Piece>().Select();
                     //Debug.Log(pieceIndex);
                     //Debug.Log(choicedIndex);
-                    if (boardManagement.ChoicedCheck(player, choicedIndex))
+                    if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
                     {
                         if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
                         {
@@ -56,7 +56,7 @@ public class GameManagement : MonoBehaviour
                     }
                     else
                     {
-                        ResetIndex(1);
+                        ResetIndex();
                     }
                 }
             }
