@@ -49,6 +49,10 @@ public class GameManagement : MonoBehaviour
                             ResetIndex();
                             ChangePlayer();
                         }
+                        else
+                        {
+                            ResetIndex(1);
+                        }
                     }
                     else
                     {
