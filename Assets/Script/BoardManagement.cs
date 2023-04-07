@@ -362,7 +362,7 @@ public class BoardManagement : MonoBehaviour
                 }
                 return false;
             case 1:
-                if (frm + new Vector2Int(1, 0) == to)
+                if (frm + new Vector2Int(0,1) == to)
                 {
                     Debug.Log("true");
                     return true;
