@@ -334,14 +334,16 @@ public class BoardManagement : MonoBehaviour
         {
             for (int dj = -2; dj <= 2; dj++)
             {
-                if (Math.Abs(di) == Math.Abs(dj))
+                Debug.Log(di + "," + dj);
+                if (!(Math.Abs(di) == Math.Abs(dj)))
                 {
-                    Debug.Log(Math.Abs(di) == Math.Abs(dj));
-                    break;
-                }
-                else if (frm + new Vector2Int(di, dj) == to)
-                {
-                    return true;
+                    if(!(di == 0 || dj == 0))
+                    {
+                        if (frm + new Vector2Int(di, dj) == to)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
         }
