@@ -215,22 +215,28 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public bool CheckMovePoss(Vector2Int frm, Vector2Int to)
+    public bool CheckMovePoss(int player, Vector2Int frm, Vector2Int to)
     {
         switch(board[frm.y,frm.x].Substring(0,1))
         {
             case "K":
+                Debug.Log(CheckKing(frm, to));
                 return CheckKing(frm, to);
             case "Q":
+                Debug.Log(CheckQueen(frm, to));
                 return CheckQueen(frm, to);
             case "L":
-                return CheckLuek(frm, to);
+                Debug.Log(CheckLuke(frm, to));
+                return CheckLuke(frm, to);
             case "B":
-                return CheckBISHOP(frm, to);
+                Debug.Log(CheckBishop(frm, to));
+                return CheckBishop(frm, to);
             case "N":
+                Debug.Log(CheckKnight(frm,to));
                 return CheckKnight(frm, to);
             case "P":
-                return CheckPawn(frm, to);
+                Debug.Log(CheckPawn(player, frm, to));
+                return CheckPawn(player, frm, to);
         }
         return false;
     }
@@ -292,7 +298,7 @@ public class BoardManagement : MonoBehaviour
         return flg;
     }
 
-    private bool CheckLuek(Vector2Int frm, Vector2Int to)
+    private bool CheckLuke(Vector2Int frm, Vector2Int to)
     {
         bool flg = false;
 
@@ -307,7 +313,7 @@ public class BoardManagement : MonoBehaviour
         return flg;
     }
 
-    private bool CheckBISHOP(Vector2Int frm,Vector2Int to)
+    private bool CheckBishop(Vector2Int frm,Vector2Int to)
     {
         bool flg = false;
 
@@ -343,11 +349,25 @@ public class BoardManagement : MonoBehaviour
         return false;
     }
 
-    private bool CheckPawn(Vector2Int frm, Vector2Int to)
+    private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
-        if(frm + new Vector2Int(0,1) == to)
+        Debug.Log(frm + "|" + to);
+        switch(player)
         {
-            return true;
+            case 0:
+                if (frm + new Vector2Int(0,-1) == to)
+                {
+                    Debug.Log("true");
+                    return true;
+                }
+                return false;
+            case 1:
+                if (frm + new Vector2Int(1, 0) == to)
+                {
+                    Debug.Log("true");
+                    return true;
+                }
+                return false;
         }
         return false;
     }
