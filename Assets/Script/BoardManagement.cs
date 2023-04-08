@@ -23,7 +23,7 @@ public class BoardManagement : MonoBehaviour
 
     }
     /// <summary>
-    /// î’ñ ÇÃîzíuÇÃèÛãµÇèâä˙èÛë‘Ç…ñﬂÇ∑
+    /// Áõ§Èù¢„ÅÆÈÖçÁΩÆ„ÅÆÁä∂Ê≥Å„ÇíÂàùÊúüÁä∂ÊÖã„Å´Êàª„Åô
     /// </summary>
     void Init()
     {
@@ -63,7 +63,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "Q2W";
                 }
-                //Ç±Ç±Ç©ÇÁBlack
+                //„Åì„Åì„Åã„ÇâBlack
                 else if ((Y == 0) && (X == 0))
                 {
                     board[Y, X] = "L1B";
@@ -139,7 +139,7 @@ public class BoardManagement : MonoBehaviour
                 }
             }
         }
-        //Debug.Log("é¿çsÇ≥ÇÍÇ‹ÇµÇΩ3");
+        //Debug.Log("ÂÆüË°å„Åï„Çå„Åæ„Åó„Åü3");
     }
 
     void ColliderSettings()
@@ -158,7 +158,7 @@ public class BoardManagement : MonoBehaviour
     }
 
     /// <summary>
-    /// LogÇ…ï\é¶
+    /// Log„Å´Ë°®Á§∫
     /// </summary>
     void BoardPrint()
     {
@@ -194,41 +194,82 @@ public class BoardManagement : MonoBehaviour
         }
     }
 
-    public bool ChoicedCheck(int player, Vector2Int choicedIndex)
+    public bool ChoicedCheck(int player, int Case, Vector2Int choicedIndex)
     {
-        string piece = board[choicedIndex.y, choicedIndex.x];
-        if (piece == "SS")
+        switch(Case)
         {
-            return true;
+            case 0:
+                string piece = board[choicedIndex.y, choicedIndex.x];
+                if (piece == "SS")
+                {
+                    return true;
+                }
+                else if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
+                {
+                    return false;
+                }
+                else if (player == 1 && piece.Substring(2, 1) == Constants.Pieces.BLACK)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            case 1:
+                piece = board[choicedIndex.y, choicedIndex.x];
+                if (!(piece == "SS"))
+                {
+                    if (player == 0 && piece.Substring(2, 1) != Constants.Pieces.WHITE)
+                    {
+                        if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if(piece == "SS")
+                {
+                    return true;
+                }
+                break;
         }
-        else if (player == 0 && piece.Substring(2, 1) == Constants.Pieces.WHITE)
-        {
-            return false;
-        }
-        else if (player == 1 && piece.Substring(2, 1) == Constants.Pieces.BLACK)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return false;
     }
 
-    public bool BoardCheck(Vector2Int now, Vector2Int next)
+    public bool CheckMovePoss(int player, Vector2Int frm, Vector2Int to)
     {
-        if (board[now.y, now.x].Substring(0, 1) == "K")
+        switch (board[frm.y, frm.x].Substring(0, 1))
         {
-            return CheckKing(now, next);
+            case "K":
+                Debug.Log(CheckKing(frm, to));
+                return CheckKing(frm, to);
+            case "Q":
+                Debug.Log(CheckQueen(frm, to));
+                return CheckQueen(frm, to);
+            case "L":
+                Debug.Log(CheckLuke(frm, to));
+                return CheckLuke(frm, to);
+            case "B":
+                Debug.Log(CheckBishop(frm, to));
+                return CheckBishop(frm, to);
+            case "N":
+                Debug.Log(CheckKnight(frm, to));
+                return CheckKnight(frm, to);
+            case "P":
+                Debug.Log(CheckPawn(player, frm, to));
+                return CheckPawn(player, frm, to);
         }
-        return true;
+        return false;
     }
 
     private bool CheckKing(Vector2Int frm, Vector2Int to)
     {
-        // ###
-        // #@#
-        // ###
+        /*
+			###
+			#@#
+			###
+		*/
         for (int di = -1; di <= 1; di++)
         {
             for (int dj = -1; dj <= 1; dj++)
@@ -240,6 +281,146 @@ public class BoardManagement : MonoBehaviour
             }
         }
 
+        return false;
+    }
+
+    private bool Direct(int sign_x, int sign_y, Vector2Int frm, Vector2Int to)
+    {
+        for (int d = 0; d < 8; d++)
+        {
+            Vector2Int movePos = frm + new Vector2Int(sign_x * d, sign_y * d);
+            if (!(0 <= movePos.x && movePos.x < 8 && 0 <= movePos.y && movePos.y < 8))
+            {
+                break;
+            }
+
+            if (movePos == to)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool CheckQueen(Vector2Int frm, Vector2Int to)
+    {
+        bool flg = false;
+
+        for (int direct = 0; direct < 8; direct++)
+        {
+            //direct 0~7
+            int radian = direct * 45;
+            //Debug.Log(radian);
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            //Debug.Log(sign_x.ToString() + ", " + sign_y.ToString());
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckLuke(Vector2Int frm, Vector2Int to)
+    {
+        bool flg = false;
+
+        for (int direct = 0; direct < 4; direct++)
+        {
+            int radian = direct * 90;
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckBishop(Vector2Int frm, Vector2Int to)
+    {
+        bool flg = false;
+
+        for (int direct = 1; direct < 8; direct += 2)
+        {
+            int radian = direct * 45;
+            int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
+            int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
+            flg |= Direct(sign_x, sign_y, frm, to);
+        }
+
+        return flg;
+    }
+
+    private bool CheckKnight(Vector2Int frm, Vector2Int to)
+    {
+        for (int di = -2; di <= 2; di++)
+        {
+            for (int dj = -2; dj <= 2; dj++)
+            {
+                Debug.Log(di + "," + dj);
+                if (!(Math.Abs(di) == Math.Abs(dj)))
+                {
+                    if(!(di == 0 || dj == 0))
+                    {
+                        if (frm + new Vector2Int(di, dj) == to)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
+    {
+        Debug.Log(frm + "|" + to);
+        switch (player)
+        {
+            case 0:
+                if (frm + new Vector2Int(0, -1) == to)
+                {
+                    if(ChoicedCheck(player,1,to))
+                    {
+                        Debug.Log("true");
+                        return true;
+                    }
+                }
+                else
+                {
+                    //1 ~ -1
+                    for (int di = -1;di <= 1;di += 2)
+                    {
+                        if(frm + new Vector2Int(di,-1)== to)
+                        {
+                            Debug.Log("true");
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            case 1:
+                if (frm + new Vector2Int(0, 1) == to)
+                {
+                    if (ChoicedCheck(player, 1, to))
+                    {
+                        Debug.Log("true");
+                        return true;
+                    }
+                }
+                else
+                {
+                    //1 ~ -1
+                    for (int di = -1; di <= 1; di += 2)
+                    {
+                        if (frm + new Vector2Int(di, 1) == to)
+                        {
+                            Debug.Log("true");
+                            return true;
+                        }
+                    }
+                }
+                return false;
+        }
         return false;
     }
 
