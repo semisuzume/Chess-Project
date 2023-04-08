@@ -23,7 +23,7 @@ public class BoardManagement : MonoBehaviour
 
     }
     /// <summary>
-    /// ”Õ–Ê‚Ì”z’u‚Ìó‹µ‚ğ‰Šúó‘Ô‚É–ß‚·
+    /// ç›¤é¢ã®é…ç½®ã®çŠ¶æ³ã‚’åˆæœŸçŠ¶æ…‹ã«æˆ»ã™
     /// </summary>
     void Init()
     {
@@ -63,7 +63,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     board[Y, X] = "Q2W";
                 }
-                //‚±‚±‚©‚çBlack
+                //ã“ã“ã‹ã‚‰Black
                 else if ((Y == 0) && (X == 0))
                 {
                     board[Y, X] = "L1B";
@@ -139,7 +139,7 @@ public class BoardManagement : MonoBehaviour
                 }
             }
         }
-        //Debug.Log("Às‚³‚ê‚Ü‚µ‚½3");
+        //Debug.Log("å®Ÿè¡Œã•ã‚Œã¾ã—ãŸ3");
     }
 
     void ColliderSettings()
@@ -158,7 +158,7 @@ public class BoardManagement : MonoBehaviour
     }
 
     /// <summary>
-    /// Log‚É•\¦
+    /// Logã«è¡¨ç¤º
     /// </summary>
     void BoardPrint()
     {
@@ -369,8 +369,6 @@ public class BoardManagement : MonoBehaviour
                 }
             }
         }
-
-        return false;
     }
 
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
