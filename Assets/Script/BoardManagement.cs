@@ -369,6 +369,7 @@ public class BoardManagement : MonoBehaviour
                 }
             }
         }
+        return false;
     }
 
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
