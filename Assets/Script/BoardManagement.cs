@@ -289,14 +289,22 @@ public class BoardManagement : MonoBehaviour
         for (int d = 0; d < 8; d++)
         {
             Vector2Int movePos = frm + new Vector2Int(sign_x * d, sign_y * d);
+            //Debug.Log(movePos.x + "|" + movePos.y);
             if (!(0 <= movePos.x && movePos.x < 8 && 0 <= movePos.y && movePos.y < 8))
             {
-                break;
+                Debug.Log("配列外です");
+                return false;
             }
 
-            if (movePos == to)
+            string rangeRank = board[movePos.y, movePos.x];
+            if(movePos == to)
             {
                 return true;
+            }
+            else if (rangeRank != "SS")
+            {
+                Debug.Log("妨害されました");
+                return false;
             }
         }
         return false;
@@ -313,7 +321,7 @@ public class BoardManagement : MonoBehaviour
             //Debug.Log(radian);
             int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
             int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
-            //Debug.Log(sign_x.ToString() + ", " + sign_y.ToString());
+            Debug.Log(sign_x.ToString() + ", " + sign_y.ToString());
             flg |= Direct(sign_x, sign_y, frm, to);
         }
 
@@ -357,9 +365,11 @@ public class BoardManagement : MonoBehaviour
             for (int dj = -2; dj <= 2; dj++)
             {
                 Debug.Log(di + "," + dj);
+                //ナイトの移動範囲は縦と横の移動数が同じになる事が無く
                 if (!(Math.Abs(di) == Math.Abs(dj)))
                 {
-                    if(!(di == 0 || dj == 0))
+                    //ｘ、ｙ共に一マス以上動く
+                    if (!(di == 0 || dj == 0))
                     {
                         if (frm + new Vector2Int(di, dj) == to)
                         {
