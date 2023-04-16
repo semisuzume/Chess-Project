@@ -216,6 +216,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     return true;
                 }
+            //pownが前進するとき相手の駒が取れないようにする
             case 1:
                 piece = board[choicedIndex.y, choicedIndex.x];
                 if (!(piece == "SS"))
@@ -231,6 +232,24 @@ public class BoardManagement : MonoBehaviour
                 else if (piece == "SS")
                 {
                     return true;
+                }
+                break;
+            //pownが斜め移動するときに呼び出す
+            case 2:
+                piece = board[choicedIndex.y, choicedIndex.x];
+                if(!(piece == "SS"))
+                {
+                    if (player == 0 && piece.Substring(2, 1) != Constants.Pieces.WHITE)
+                    {
+                        if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
                 }
                 break;
         }
@@ -257,7 +276,6 @@ public class BoardManagement : MonoBehaviour
                 Debug.Log(CheckKnight(frm, to));
                 return CheckKnight(frm, to);
             case "P":
-                Debug.Log(CheckPawn(player, frm, to));
                 return CheckPawn(player, frm, to);
         }
         return false;
@@ -286,7 +304,7 @@ public class BoardManagement : MonoBehaviour
 
     private bool Direct(int sign_x, int sign_y, Vector2Int frm, Vector2Int to)
     {
-        for (int d = 0; d < 8; d++)
+        for (int d = 1; d < 8; d++)
         {
             Vector2Int movePos = frm + new Vector2Int(sign_x * d, sign_y * d);
             if (!(0 <= movePos.x && movePos.x < 8 && 0 <= movePos.y && movePos.y < 8))
@@ -372,6 +390,13 @@ public class BoardManagement : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Debugで呼び出しちゃダメ
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="frm"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
         Debug.Log(frm + "|" + to);
@@ -406,9 +431,12 @@ public class BoardManagement : MonoBehaviour
                         {
                             if (frm + new Vector2Int(di, -1) == to)
                             {
-                                Debug.Log("true");
-                                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                                return true;
+                                if(ChoicedCheck(player,2,to))
+                                {
+                                    Debug.Log("true");
+                                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -430,8 +458,11 @@ public class BoardManagement : MonoBehaviour
                         {
                             if (frm + new Vector2Int(di, -1) == to)
                             {
-                                Debug.Log("true");
-                                return true;
+                                if(ChoicedCheck(player, 2, to))
+                                {
+                                    Debug.Log("true");
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -465,9 +496,12 @@ public class BoardManagement : MonoBehaviour
                         {
                             if (frm + new Vector2Int(di, 1) == to)
                             {
-                                Debug.Log("true");
-                                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                                return true;
+                                if (ChoicedCheck(player, 2, to))
+                                {
+                                    Debug.Log("true");
+                                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -490,15 +524,18 @@ public class BoardManagement : MonoBehaviour
                         {
                             if (frm + new Vector2Int(di, 1) == to)
                             {
-                                Debug.Log("true");
-                                return true;
+                                if (ChoicedCheck(player, 2, to))
+                                {
+                                    Debug.Log("true");
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
-                Debug.Log("false");
                 return false;
         }
+        Debug.Log("false");
         return false;
     }
 
