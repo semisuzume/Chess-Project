@@ -385,8 +385,8 @@ public class BoardManagement : MonoBehaviour
                     {
                         if (ChoicedCheck(player, 1, to))
                         {
-                            Debug.Log("true");
                             board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                            Debug.Log("true");
                             return true;
                         }
                     }
@@ -436,8 +436,7 @@ public class BoardManagement : MonoBehaviour
                         }
                     }
                 }
-                Debug.Log("false");
-                return false;
+                break;
             case 1:
                 if (board[frm.y, frm.x].Length == 4)
                 {
