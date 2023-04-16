@@ -98,11 +98,11 @@ public class BoardManagement : MonoBehaviour
                 }
                 else if (Y == 6)
                 {
-                    board[Y, X] = "P" + (X + 1).ToString() + "W";
+                    board[Y, X] = "P" + (X + 1).ToString() + "W" + 1;
                 }
                 else if (Y == 1)
                 {
-                    board[Y, X] = "P" + (X + 1).ToString() + "B";
+                    board[Y, X] = "P" + (X + 1).ToString() + "B" + 1;
                 }
                 else
                 {
@@ -196,7 +196,7 @@ public class BoardManagement : MonoBehaviour
 
     public bool ChoicedCheck(int player, int Case, Vector2Int choicedIndex)
     {
-        switch(Case)
+        switch (Case)
         {
             case 0:
                 string piece = board[choicedIndex.y, choicedIndex.x];
@@ -228,7 +228,7 @@ public class BoardManagement : MonoBehaviour
                         }
                     }
                 }
-                else if(piece == "SS")
+                else if (piece == "SS")
                 {
                     return true;
                 }
@@ -359,7 +359,7 @@ public class BoardManagement : MonoBehaviour
                 Debug.Log(di + "," + dj);
                 if (!(Math.Abs(di) == Math.Abs(dj)))
                 {
-                    if(!(di == 0 || dj == 0))
+                    if (!(di == 0 || dj == 0))
                     {
                         if (frm + new Vector2Int(di, dj) == to)
                         {
@@ -378,48 +378,126 @@ public class BoardManagement : MonoBehaviour
         switch (player)
         {
             case 0:
-                if (frm + new Vector2Int(0, -1) == to)
+                if (board[frm.y, frm.x].Length == 4)
                 {
-                    if(ChoicedCheck(player,1,to))
+
+                    if (frm + new Vector2Int(0, -2) == to)
                     {
-                        Debug.Log("true");
-                        return true;
+                        if (ChoicedCheck(player, 1, to))
+                        {
+                            Debug.Log("true");
+                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                            return true;
+                        }
+                    }
+                    if (frm + new Vector2Int(0, -1) == to)
+                    {
+                        if (ChoicedCheck(player, 1, to))
+                        {
+                            Debug.Log("true");
+                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        //1 ~ -1
+                        for (int di = -1; di <= 1; di += 2)
+                        {
+                            if (frm + new Vector2Int(di, -1) == to)
+                            {
+                                Debug.Log("true");
+                                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                                return true;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    //1 ~ -1
-                    for (int di = -1;di <= 1;di += 2)
+                    if (frm + new Vector2Int(0, -1) == to)
                     {
-                        if(frm + new Vector2Int(di,-1)== to)
+                        if (ChoicedCheck(player, 1, to))
                         {
                             Debug.Log("true");
                             return true;
                         }
                     }
+                    else
+                    {
+                        //1 ~ -1
+                        for (int di = -1; di <= 1; di += 2)
+                        {
+                            if (frm + new Vector2Int(di, -1) == to)
+                            {
+                                Debug.Log("true");
+                                return true;
+                            }
+                        }
+                    }
                 }
+                Debug.Log("false");
                 return false;
             case 1:
-                if (frm + new Vector2Int(0, 1) == to)
+                if (board[frm.y, frm.x].Length == 4)
                 {
-                    if (ChoicedCheck(player, 1, to))
+                    if (frm + new Vector2Int(0, 2) == to)
                     {
-                        Debug.Log("true");
-                        return true;
+                        if (ChoicedCheck(player, 1, to))
+                        {
+                            Debug.Log("true");
+                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                            return true;
+                        }
                     }
+                    if (frm + new Vector2Int(0, 1) == to)
+                    {
+                        if (ChoicedCheck(player, 1, to))
+                        {
+                            Debug.Log("true");
+                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        //1 ~ -1
+                        for (int di = -1; di <= 1; di += 2)
+                        {
+                            if (frm + new Vector2Int(di, 1) == to)
+                            {
+                                Debug.Log("true");
+                                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                                return true;
+                            }
+                        }
+                    }
+
                 }
                 else
                 {
-                    //1 ~ -1
-                    for (int di = -1; di <= 1; di += 2)
+                    if (frm + new Vector2Int(0, 1) == to)
                     {
-                        if (frm + new Vector2Int(di, 1) == to)
+                        if (ChoicedCheck(player, 1, to))
                         {
                             Debug.Log("true");
                             return true;
                         }
                     }
+                    else
+                    {
+                        //1 ~ -1
+                        for (int di = -1; di <= 1; di += 2)
+                        {
+                            if (frm + new Vector2Int(di, 1) == to)
+                            {
+                                Debug.Log("true");
+                                return true;
+                            }
+                        }
+                    }
                 }
+                Debug.Log("false");
                 return false;
         }
         return false;
