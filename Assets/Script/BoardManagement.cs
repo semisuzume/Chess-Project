@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class BoardManagement : MonoBehaviour
 {
@@ -237,14 +238,18 @@ public class BoardManagement : MonoBehaviour
             //pownが斜め移動するときに呼び出す
             case 2:
                 piece = board[choicedIndex.y, choicedIndex.x];
-                if(!(piece == "SS"))
-                {
+                //選択先が空白で
+                if (!(piece == "SS"))
+                {　　
+                    //白のターンで選択しているのが白の駒じゃない時
                     if (player == 0 && piece.Substring(2, 1) != Constants.Pieces.WHITE)
                     {
-                        if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
+                    //黒のターンで選択しているのが黒の駒じゃない時
+                    if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
+                    {
+                        return true;
                     }
                 }
                 else
@@ -410,152 +415,81 @@ public class BoardManagement : MonoBehaviour
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
         Debug.Log(frm + "|" + to);
-        switch (player)
+        //白ならば-1黒ならば1
+        int direct = 1;
+        if (player == 0)
         {
-            case 0:
-                if (board[frm.y, frm.x].Length == 4)
-                {
-
-                    if (frm + new Vector2Int(0, -2) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                            Debug.Log("true");
-                            return true;
-                        }
-                    }
-                    if (frm + new Vector2Int(0, -1) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            Debug.Log("true");
-                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        //1 ~ -1
-                        for (int di = -1; di <= 1; di += 2)
-                        {
-                            if (frm + new Vector2Int(di, -1) == to)
-                            {
-                                if(ChoicedCheck(player,2,to))
-                                {
-                                    Debug.Log("true");
-                                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (frm + new Vector2Int(0, -1) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            Debug.Log("true");
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        //1 ~ -1
-                        for (int di = -1; di <= 1; di += 2)
-                        {
-                            if (frm + new Vector2Int(di, -1) == to)
-                            {
-                                if(ChoicedCheck(player, 2, to))
-                                {
-                                    Debug.Log("true");
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-            case 1:
-                if (board[frm.y, frm.x].Length == 4)
-                {
-                    if (frm + new Vector2Int(0, 2) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            Debug.Log("true");
-                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                            return true;
-                        }
-                    }
-                    if (frm + new Vector2Int(0, 1) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            Debug.Log("true");
-                            board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        //1 ~ -1
-                        for (int di = -1; di <= 1; di += 2)
-                        {
-                            if (frm + new Vector2Int(di, 1) == to)
-                            {
-                                if (ChoicedCheck(player, 2, to))
-                                {
-                                    Debug.Log("true");
-                                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (frm + new Vector2Int(0, 1) == to)
-                    {
-                        if (ChoicedCheck(player, 1, to))
-                        {
-                            Debug.Log("true");
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        //1 ~ -1
-                        for (int di = -1; di <= 1; di += 2)
-                        {
-                            if (frm + new Vector2Int(di, 1) == to)
-                            {
-                                if (ChoicedCheck(player, 2, to))
-                                {
-                                    Debug.Log("true");
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                return false;
+            direct = -1;
         }
+
+        //配列のデータが４文字どうかで一度も動いていないかを判別する
+        if (board[frm.y, frm.x].Length == 4)
+        {
+            //二マス動かす時
+            if (frm + new Vector2Int(0, 2 * direct) == to)
+            {
+                if (ChoicedCheck(player, 1, to))
+                {
+                    Debug.Log("true");
+                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                    return true;
+                }
+            }
+        }
+        //一マス動く時
+        if (frm + new Vector2Int(0, 1 * direct) == to)
+        {
+            if (ChoicedCheck(player, 1, to))
+            {
+                Debug.Log("true");
+                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                return true;
+            }
+        }
+        //斜めに移動する時
+        else
+        {
+            //1 ~ -1
+            for (int di = -1; di <= 1; di += 2)
+            {
+                if (frm + new Vector2Int(di, 1 * direct) == to)
+                {
+                    Debug.Log("成功");
+                    if (ChoicedCheck(player, 2, to))
+                    {
+                        Debug.Log("true");
+                        board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                        return true;
+                    }
+                }
+            }
+        }
+
         Debug.Log("false");
         return false;
     }
 
-    public void Promotion(Vector2Int frm, Vector2Int to)
-    {
-        if (board[frm.y, frm.x].Substring(0, 1) == "P" && (0 < to.x) && (to.x < 8) && (to.y == 0 || to.y == 7))
-        {
-
-        }
-    }
+    //public void Promotion(int player, Vector2Int frm, Vector2Int to)
+    //{
+    //    int quantity;
+    //    if (player == 0)
+    //    {   
+    //        //相手陣地の端についたら
+    //        if (board[frm.y, frm.x].Substring(0, 1) == "P" && (0 < to.x) && (to.x < 8) && (to.y == 0))
+    //        {
+    //            Debug.Log("プロモーション");
+    //            if (Input.GetKey(KeyCode.P))
+    //            {
+    //                //何もなし
+    //            }
+    //            if (Input.GetKey(KeyCode.Q))
+    //            {
+    //                board[to.y, to.x] = "Q0W";
+    //            }
+    //            if(Input.GetKey(ke)
+    //        }
+    //    }
+    //}
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
     {
