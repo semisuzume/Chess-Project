@@ -539,6 +539,14 @@ public class BoardManagement : MonoBehaviour
         return false;
     }
 
+    public void Promotion(Vector2Int frm, Vector2Int to)
+    {
+        if (board[frm.y, frm.x].Substring(0, 1) == "P" && (0 < to.x) && (to.x < 8) && (to.y == 0 || to.y == 7))
+        {
+
+        }
+    }
+
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
     {
         string selectedPieceString = board[pieceIndex.y, pieceIndex.x];
