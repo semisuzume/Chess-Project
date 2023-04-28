@@ -44,13 +44,14 @@ public class GameManagement : MonoBehaviour
                     {
                         if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
                         {
-                            Debug.Log("A");
+                            //Debug.Log("A");
                             boardManagement.MovePiece(pieceIndex, choicedIndex);
                             ResetIndex();
                             ChangePlayer();
                         }
                         else
                         {
+                            //Debug.Log("B");
                             ResetIndex(1);
                         }
                     }
