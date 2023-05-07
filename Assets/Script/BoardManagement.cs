@@ -5,14 +5,20 @@ using System;
 
 public class BoardManagement : MonoBehaviour
 {
+    /// <summary>
+    /// 順番:RNC
+    /// </summary>
     public static string[,] board = new string[8, 8];
     GameObject piece;
+    int checkInputKind;
+    GameObject image = GameObject.Find("Image");
 
     // Start is called before the first frame update
     void Start()
     {
         Init();
         GeneratePiece();
+        image.SetActive(false);
         //Debug.Log(" ");
         //BoardPrint();
     }
@@ -20,7 +26,26 @@ public class BoardManagement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKey(KeyCode.P))
+        {
+            checkInputKind = 0;
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            checkInputKind = 1;
+        }
+        if (Input.GetKey(KeyCode.B))
+        {
+            checkInputKind = 2;
+        }
+        if (Input.GetKey(KeyCode.K))
+        {
+            checkInputKind = 3;
+        }
+        if (Input.GetKey(KeyCode.L))
+        {
+            checkInputKind = 4;
+        }
     }
     /// <summary>
     /// 盤面の配置の状況を初期状態に戻す
@@ -196,7 +221,7 @@ public class BoardManagement : MonoBehaviour
 
     public bool ChoicedCheck(int player, int Case, Vector2Int choicedIndex)
     {
-        switch(Case)
+        switch (Case)
         {
             case 0:
                 string piece = board[choicedIndex.y, choicedIndex.x];
@@ -228,7 +253,7 @@ public class BoardManagement : MonoBehaviour
                         }
                     }
                 }
-                else if(piece == "SS")
+                else if (piece == "SS")
                 {
                     return true;
                 }
@@ -297,7 +322,7 @@ public class BoardManagement : MonoBehaviour
             }
 
             string rangeRank = board[movePos.y, movePos.x];
-            if(movePos == to)
+            if (movePos == to)
             {
                 return true;
             }
@@ -390,18 +415,19 @@ public class BoardManagement : MonoBehaviour
             case 0:
                 if (frm + new Vector2Int(0, -1) == to)
                 {
-                    if(ChoicedCheck(player,1,to))
+                    if (ChoicedCheck(player, 1, to))
                     {
                         Debug.Log("true");
+                        Promotion(player, to);
                         return true;
                     }
                 }
                 else
                 {
                     //1 ~ -1
-                    for (int di = -1;di <= 1;di += 2)
+                    for (int di = -1; di <= 1; di += 2)
                     {
-                        if(frm + new Vector2Int(di,-1)== to)
+                        if (frm + new Vector2Int(di, -1) == to)
                         {
                             Debug.Log("true");
                             return true;
@@ -433,6 +459,52 @@ public class BoardManagement : MonoBehaviour
                 return false;
         }
         return false;
+    }
+
+
+    //CheckPawn関数から呼び出す
+    private void Promotion(int player, Vector2Int to)
+    {
+        checkInputKind = -1;
+        //ポーンが盤面の端に到達したとき
+        if (to.y == 7 || to.y == 0)
+        {
+            image.SetActive(true);
+            Debug.Log("Promotion");
+            if (!(checkInputKind == -1))
+            {
+                image.SetActive(false);
+            }
+        }
+    }
+    private void Promotion2(int player,Vector2Int to)
+    {
+        string color;
+        if (player == 0)
+        {
+            color = "W";
+        }
+        else
+        {
+            color = "B";
+        }
+        switch (checkInputKind)
+        {
+            case 0:
+                break;
+            case 1:
+                board[to.y, to.x] = "Q0" + color;
+                break;
+            case 2:
+                board[to.y, to.x] = "B0" + color;
+                break;
+            case 3:
+                board[to.y, to.x] = "N0" + color;
+                break;
+            case 4:
+                board[to.y, to.x] = "L0" + color;
+                break;
+        }
     }
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
