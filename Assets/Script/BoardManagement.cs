@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class BoardManagement : MonoBehaviour
 {
@@ -11,7 +12,10 @@ public class BoardManagement : MonoBehaviour
     public static string[,] board = new string[8, 8];
     GameObject piece;
     int checkInputKind;
+    //Promotion選択関係
+    private Button[] buttons = new Button[5];
     GameObject image = GameObject.Find("Image");
+
 
     // Start is called before the first frame update
     void Start()
@@ -460,7 +464,17 @@ public class BoardManagement : MonoBehaviour
         }
         return false;
     }
-
+    
+    public void ButtonFunction()
+    {
+        int buttonIndex;
+        for(buttonIndex = 0; buttonIndex <= 5;)
+        {
+            buttons[buttonIndex] = image.GetComponentInChildren<Button>();
+            buttons[buttonIndex].onClick.AddListener(() => checkInputKind += buttonIndex);
+            buttonIndex++;
+        }
+    }
 
     //CheckPawn関数から呼び出す
     private void Promotion(int player, Vector2Int to)
@@ -516,3 +530,4 @@ public class BoardManagement : MonoBehaviour
         GeneratePiece();
     }
 }
+
