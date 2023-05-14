@@ -7,7 +7,7 @@ public class GameManagement : MonoBehaviour
     private BoardManagement boardManagement;
     private Vector2Int pieceIndex = new Vector2Int(-1, -1);
     private Vector2Int choicedIndex = new Vector2Int(-1, -1);
-    private int player = 0;
+    public int player = 0;
 
     // Start is called before the first frame update
     void Start()
