@@ -11,15 +11,15 @@ public class BoardManagement : MonoBehaviour
     /// </summary>
     public static string[,] board = new string[8, 8];
     GameObject piece;
-    int checkInputKind;
-    //Promotion選択関係
-    private Button[] buttons = new Button[5];
-    GameObject image = GameObject.Find("Image");
-
+    GameObject image;
+    GameManagement gameManagement;
+    Vector2Int topFloorTo;
 
     // Start is called before the first frame update
     void Start()
     {
+        image = GameObject.Find("Image");
+        gameManagement = gameObject.GetComponent<GameManagement>();
         Init();
         GeneratePiece();
         image.SetActive(false);
@@ -30,26 +30,7 @@ public class BoardManagement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.P))
-        {
-            checkInputKind = 0;
-        }
-        if (Input.GetKey(KeyCode.Q))
-        {
-            checkInputKind = 1;
-        }
-        if (Input.GetKey(KeyCode.B))
-        {
-            checkInputKind = 2;
-        }
-        if (Input.GetKey(KeyCode.K))
-        {
-            checkInputKind = 3;
-        }
-        if (Input.GetKey(KeyCode.L))
-        {
-            checkInputKind = 4;
-        }
+        
     }
     /// <summary>
     /// 盤面の配置の状況を初期状態に戻す
@@ -413,7 +394,7 @@ public class BoardManagement : MonoBehaviour
 
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
-        Debug.Log(frm + "|" + to);
+        //Debug.Log(frm + "|" + to);
         switch (player)
         {
             case 0:
@@ -422,7 +403,7 @@ public class BoardManagement : MonoBehaviour
                     if (ChoicedCheck(player, 1, to))
                     {
                         Debug.Log("true");
-                        Promotion(player, to);
+                        CheckPromotion(player, to);
                         return true;
                     }
                 }
@@ -434,6 +415,7 @@ public class BoardManagement : MonoBehaviour
                         if (frm + new Vector2Int(di, -1) == to)
                         {
                             Debug.Log("true");
+                            CheckPromotion(player, to);
                             return true;
                         }
                     }
@@ -445,6 +427,7 @@ public class BoardManagement : MonoBehaviour
                     if (ChoicedCheck(player, 1, to))
                     {
                         Debug.Log("true");
+                        CheckPromotion(player, to);
                         return true;
                     }
                 }
@@ -456,6 +439,7 @@ public class BoardManagement : MonoBehaviour
                         if (frm + new Vector2Int(di, 1) == to)
                         {
                             Debug.Log("true");
+                            CheckPromotion(player, to);
                             return true;
                         }
                     }
@@ -464,61 +448,31 @@ public class BoardManagement : MonoBehaviour
         }
         return false;
     }
-    
-    public void ButtonFunction()
-    {
-        int buttonIndex;
-        for(buttonIndex = 0; buttonIndex <= 5;)
-        {
-            buttons[buttonIndex] = image.GetComponentInChildren<Button>();
-            buttons[buttonIndex].onClick.AddListener(() => checkInputKind += buttonIndex);
-            buttonIndex++;
-        }
-    }
 
     //CheckPawn関数から呼び出す
-    private void Promotion(int player, Vector2Int to)
+    private void CheckPromotion(int player, Vector2Int to)
     {
-        checkInputKind = -1;
         //ポーンが盤面の端に到達したとき
         if (to.y == 7 || to.y == 0)
         {
             image.SetActive(true);
+            topFloorTo = to;
             Debug.Log("Promotion");
-            if (!(checkInputKind == -1))
-            {
-                image.SetActive(false);
-            }
         }
     }
-    private void Promotion2(int player,Vector2Int to)
+    public void Promotion(string rank)
     {
-        string color;
+        int player = gameManagement.player;
+        string color = null;
         if (player == 0)
         {
             color = "W";
         }
-        else
+        else if(player == 1)
         {
             color = "B";
         }
-        switch (checkInputKind)
-        {
-            case 0:
-                break;
-            case 1:
-                board[to.y, to.x] = "Q0" + color;
-                break;
-            case 2:
-                board[to.y, to.x] = "B0" + color;
-                break;
-            case 3:
-                board[to.y, to.x] = "N0" + color;
-                break;
-            case 4:
-                board[to.y, to.x] = "L0" + color;
-                break;
-        }
+        board[topFloorTo.y, topFloorTo.x] = rank + "0" + color;
     }
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
