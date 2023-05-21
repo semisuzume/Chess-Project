@@ -8,58 +8,79 @@ public class GameManagement : MonoBehaviour
     private Vector2Int pieceIndex = new Vector2Int(-1, -1);
     private Vector2Int choicedIndex = new Vector2Int(-1, -1);
     public int player = 0;
+    bool F;
 
     // Start is called before the first frame update
     void Start()
     {
         boardManagement = GetComponent<BoardManagement>();
+        StartCoroutine("Select");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if(Input.GetKey(KeyCode.Space))
         {
-            GameObject selectPiece = null;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            F = false;
+        }
+    }
+
+    private IEnumerator Select()
+    {
+        while(true)
+        {
+            if (Input.GetMouseButtonUp(0))
             {
-                selectPiece = hit.collider.gameObject;
-                //Debug.Log(selectPiece);
-                if (pieceIndex.x < 0 || pieceIndex.y < 0)
+                GameObject selectPiece = null;
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    pieceIndex = selectPiece.GetComponent<Piece>().Select();
-                    if (!boardManagement.CheckTurn(player, pieceIndex))
+                    //取得
+                    selectPiece = hit.collider.gameObject;
+                    //まだ移動させる駒を選択していないなら
+                    if (pieceIndex.x < 0 || pieceIndex.y < 0)
                     {
-                        ResetIndex(0);
-                    }
-                    //Debug.Log(pieceIndex);
-                    //Debug.Log(choicedIndex);
-                }
-                else if (choicedIndex.x < 0 || choicedIndex.y < 0)
-                {
-                    choicedIndex = selectPiece.GetComponent<Piece>().Select();
-                    //Debug.Log(pieceIndex);
-                    //Debug.Log(choicedIndex);
-                    if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
-                    {
-                        if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                        pieceIndex = selectPiece.GetComponent<Piece>().Select();
+                        //選択したものが"SS"だったのならリセット
+                        if (!boardManagement.CheckTurn(player, pieceIndex))
                         {
-                            Debug.Log("A");
-                            boardManagement.MovePiece(pieceIndex, choicedIndex);
-                            ResetIndex();
-                            ChangePlayer();
+                            ResetIndex(0);
+                        }
+                    }
+                    else if (choicedIndex.x < 0 || choicedIndex.y < 0)
+                    {
+                        choicedIndex = selectPiece.GetComponent<Piece>().Select();
+                        //Debug.Log(pieceIndex);
+                        //Debug.Log(choicedIndex);
+                        if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
+                        {
+                            //checkPown等
+                            if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                            {
+                                Debug.Log("A");
+                                F = true;
+                                boardManagement.MovePiece(pieceIndex, choicedIndex);
+                                while (F == true)
+                                {
+                                    Debug.Log("while");
+                                    yield return null;
+                                }
+                                ResetIndex();
+                                ChangePlayer();
+                            }
+                            else
+                            {
+                                ResetIndex(1);
+                            }
                         }
                         else
                         {
-                            ResetIndex(1);
+                            ResetIndex();
                         }
-                    }
-                    else
-                    {
-                        ResetIndex();
                     }
                 }
             }
+            yield return null;
         }
     }
 
