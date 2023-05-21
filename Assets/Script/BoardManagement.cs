@@ -108,11 +108,11 @@ public class BoardManagement : MonoBehaviour
                 }
                 else if (Y == 6)
                 {
-                    board[Y, X] = "P" + (X + 1).ToString() + "W";
+                    board[Y, X] = "P" + (X + 1).ToString() + "W" + 1;
                 }
                 else if (Y == 1)
                 {
-                    board[Y, X] = "P" + (X + 1).ToString() + "B";
+                    board[Y, X] = "P" + (X + 1).ToString() + "B" + 1;
                 }
                 else
                 {
@@ -462,17 +462,20 @@ public class BoardManagement : MonoBehaviour
     }
     public void Promotion(string rank)
     {
+        image.SetActive(false);
         int player = gameManagement.player;
         string color = null;
         if (player == 0)
         {
-            color = "W";
+            color = "B";
         }
         else if(player == 1)
         {
-            color = "B";
+            color = "W";
         }
         board[topFloorTo.y, topFloorTo.x] = rank + "0" + color;
+        Debug.Log(board[topFloorTo.y, topFloorTo.x]);
+        GeneratePiece();
     }
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
