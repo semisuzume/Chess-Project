@@ -8,22 +8,20 @@ public class GameManagement : MonoBehaviour
     private Vector2Int pieceIndex = new Vector2Int(-1, -1);
     private Vector2Int choicedIndex = new Vector2Int(-1, -1);
     public int player = 0;
-    bool F;
+    public bool F;
 
     // Start is called before the first frame update
     void Start()
     {
         boardManagement = GetComponent<BoardManagement>();
         StartCoroutine("Select");
+        F = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
-        {
-            F = false;
-        }
+        
     }
 
     private IEnumerator Select()
@@ -58,7 +56,6 @@ public class GameManagement : MonoBehaviour
                             if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
                             {
                                 Debug.Log("A");
-                                F = true;
                                 boardManagement.MovePiece(pieceIndex, choicedIndex);
                                 while (F == true)
                                 {
