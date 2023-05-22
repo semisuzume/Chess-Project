@@ -457,6 +457,7 @@ public class BoardManagement : MonoBehaviour
         {
             image.SetActive(true);
             topFloorTo = to;
+            gameManagement.F = true;
             Debug.Log("Promotion");
         }
     }
@@ -467,15 +468,16 @@ public class BoardManagement : MonoBehaviour
         string color = null;
         if (player == 0)
         {
-            color = "B";
+            color = "W";
         }
         else if(player == 1)
         {
-            color = "W";
+            color = "B";
         }
         board[topFloorTo.y, topFloorTo.x] = rank + "0" + color;
         Debug.Log(board[topFloorTo.y, topFloorTo.x]);
         GeneratePiece();
+        gameManagement.F = false;
     }
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
