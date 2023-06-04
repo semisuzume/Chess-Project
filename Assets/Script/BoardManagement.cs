@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.UI;
 
 public class BoardManagement : MonoBehaviour
 {
@@ -226,6 +225,7 @@ public class BoardManagement : MonoBehaviour
                 {
                     return true;
                 }
+            //pownが前進するとき相手の駒が取れないようにする
             case 1:
                 piece = board[choicedIndex.y, choicedIndex.x];
                 if (!(piece == "SS"))
@@ -241,6 +241,28 @@ public class BoardManagement : MonoBehaviour
                 else if (piece == "SS")
                 {
                     return true;
+                }
+                break;
+            //pownが斜め移動するときに呼び出す
+            case 2:
+                piece = board[choicedIndex.y, choicedIndex.x];
+                //選択先が空白で
+                if (!(piece == "SS"))
+                {　　
+                    //白のターンで選択しているのが白の駒じゃない時
+                    if (player == 0 && piece.Substring(2, 1) != Constants.Pieces.WHITE)
+                    {
+                        return true;
+                    }
+                    //黒のターンで選択しているのが黒の駒じゃない時
+                    if (player == 1 && piece.Substring(2, 1) != Constants.Pieces.BLACK)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
                 }
                 break;
         }
@@ -267,7 +289,6 @@ public class BoardManagement : MonoBehaviour
                 Debug.Log(CheckKnight(frm, to));
                 return CheckKnight(frm, to);
             case "P":
-                Debug.Log(CheckPawn(player, frm, to));
                 return CheckPawn(player, frm, to);
         }
         return false;
@@ -296,7 +317,7 @@ public class BoardManagement : MonoBehaviour
 
     private bool Direct(int sign_x, int sign_y, Vector2Int frm, Vector2Int to)
     {
-        for (int d = 0; d < 8; d++)
+        for (int d = 1; d < 8; d++)
         {
             Vector2Int movePos = frm + new Vector2Int(sign_x * d, sign_y * d);
             //Debug.Log(movePos.x + "|" + movePos.y);
@@ -392,39 +413,56 @@ public class BoardManagement : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Debugで呼び出しちゃダメ
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="frm"></param>
+    /// <param name="to"></param>
+    /// <returns></returns>
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
-        //Debug.Log(frm + "|" + to);
-        switch (player)
+    　　//白ならば-1黒ならば1
+        int direct = 1;
+        if (player == 0)
         {
-            case 0:
-                if (frm + new Vector2Int(0, -1) == to)
+            direct = -1;
+        }
+
+        //配列のデータが４文字どうかで一度も動いていないかを判別する
+        if (board[frm.y, frm.x].Length == 4)
+        {
+            //二マス動かす時
+            if (frm + new Vector2Int(0, 2 * direct) == to)
+            {
+                if (ChoicedCheck(player, 1, to))
                 {
-                    if (ChoicedCheck(player, 1, to))
-                    {
-                        Debug.Log("true");
-                        CheckPromotion(player, to);
-                        return true;
-                    }
+                    Debug.Log("true");
+                    board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                    return true;
                 }
-                else
+            }
+        }
+        //一マス動く時
+        if (frm + new Vector2Int(0, 1 * direct) == to)
+        {
+            if (ChoicedCheck(player, 1, to))
+            {
+                Debug.Log("true");
+                board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                return true;
+            }
+        }
+        //斜めに移動する時
+        else
+        {
+            //1 ~ -1
+            for (int di = -1; di <= 1; di += 2)
+            {
+                if (frm + new Vector2Int(di, 1 * direct) == to)
                 {
-                    //1 ~ -1
-                    for (int di = -1; di <= 1; di += 2)
-                    {
-                        if (frm + new Vector2Int(di, -1) == to)
-                        {
-                            Debug.Log("true");
-                            CheckPromotion(player, to);
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            case 1:
-                if (frm + new Vector2Int(0, 1) == to)
-                {
-                    if (ChoicedCheck(player, 1, to))
+                    Debug.Log("成功");
+                    if (ChoicedCheck(player, 2, to))
                     {
                         Debug.Log("true");
                         CheckPromotion(player, to);
@@ -446,9 +484,10 @@ public class BoardManagement : MonoBehaviour
                 }
                 return false;
         }
+
+        Debug.Log("false");
         return false;
     }
-
     //CheckPawn関数から呼び出す
     private void CheckPromotion(int player, Vector2Int to)
     {
@@ -489,4 +528,3 @@ public class BoardManagement : MonoBehaviour
         GeneratePiece();
     }
 }
-

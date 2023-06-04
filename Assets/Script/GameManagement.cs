@@ -33,13 +33,13 @@ public class GameManagement : MonoBehaviour
                 GameObject selectPiece = null;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    //Žæ“¾
+                    //ï¿½æ“¾
                     selectPiece = hit.collider.gameObject;
-                    //‚Ü‚¾ˆÚ“®‚³‚¹‚é‹î‚ð‘I‘ð‚µ‚Ä‚¢‚È‚¢‚È‚ç
+                    //ï¿½Ü‚ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½
                     if (pieceIndex.x < 0 || pieceIndex.y < 0)
                     {
                         pieceIndex = selectPiece.GetComponent<Piece>().Select();
-                        //‘I‘ð‚µ‚½‚à‚Ì‚ª"SS"‚¾‚Á‚½‚Ì‚È‚çƒŠƒZƒbƒg
+                        //ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½"SS"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚È‚çƒŠï¿½Zï¿½bï¿½g
                         if (!boardManagement.CheckTurn(player, pieceIndex))
                         {
                             ResetIndex(0);
@@ -48,18 +48,14 @@ public class GameManagement : MonoBehaviour
                     else if (choicedIndex.x < 0 || choicedIndex.y < 0)
                     {
                         choicedIndex = selectPiece.GetComponent<Piece>().Select();
-                        //Debug.Log(pieceIndex);
-                        //Debug.Log(choicedIndex);
                         if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
                         {
-                            //checkPown“™
+                            //checkPownï¿½ï¿½
                             if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
                             {
-                                Debug.Log("A");
                                 boardManagement.MovePiece(pieceIndex, choicedIndex);
                                 while (F == true)
                                 {
-                                    Debug.Log("while");
                                     yield return null;
                                 }
                                 ResetIndex();
