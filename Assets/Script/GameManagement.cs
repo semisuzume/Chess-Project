@@ -7,60 +7,73 @@ public class GameManagement : MonoBehaviour
     private BoardManagement boardManagement;
     private Vector2Int pieceIndex = new Vector2Int(-1, -1);
     private Vector2Int choicedIndex = new Vector2Int(-1, -1);
-    private int player = 0;
+    public int player = 0;
+    public bool F;
 
     // Start is called before the first frame update
     void Start()
     {
         boardManagement = GetComponent<BoardManagement>();
+        StartCoroutine("Select");
+        F = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        
+    }
+
+    private IEnumerator Select()
+    {
+        while(true)
         {
-            GameObject selectPiece = null;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            if (Input.GetMouseButtonUp(0))
             {
-                selectPiece = hit.collider.gameObject;
-                //Debug.Log(selectPiece);
-                if (pieceIndex.x < 0 || pieceIndex.y < 0)
+                GameObject selectPiece = null;
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    pieceIndex = selectPiece.GetComponent<Piece>().Select();
-                    if (!boardManagement.CheckTurn(player, pieceIndex))
+                    //�擾
+                    selectPiece = hit.collider.gameObject;
+                    //�܂��ړ���������I��Ă��Ȃ��Ȃ�
+                    if (pieceIndex.x < 0 || pieceIndex.y < 0)
                     {
-                        ResetIndex(0);
-                    }
-                    //Debug.Log(pieceIndex);
-                    //Debug.Log(choicedIndex);
-                }
-                else if (choicedIndex.x < 0 || choicedIndex.y < 0)
-                {
-                    choicedIndex = selectPiece.GetComponent<Piece>().Select();
-                    //Debug.Log(pieceIndex);
-                    //Debug.Log(choicedIndex);
-                    if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
-                    {
-                        if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                        pieceIndex = selectPiece.GetComponent<Piece>().Select();
+                        //�I�����̂�"SS"������̂Ȃ烊�Z�b�g
+                        if (!boardManagement.CheckTurn(player, pieceIndex))
                         {
-                            //Debug.Log("A");
-                            boardManagement.MovePiece(pieceIndex, choicedIndex);
-                            ResetIndex();
-                            ChangePlayer();
+                            ResetIndex(0);
+                        }
+                    }
+                    else if (choicedIndex.x < 0 || choicedIndex.y < 0)
+                    {
+                        choicedIndex = selectPiece.GetComponent<Piece>().Select();
+                        if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
+                        {
+                            //checkPown��
+                            if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                            {
+                                boardManagement.MovePiece(pieceIndex, choicedIndex);
+                                while (F == true)
+                                {
+                                    yield return null;
+                                }
+                                ResetIndex();
+                                ChangePlayer();
+                            }
+                            else
+                            {
+                                ResetIndex(1);
+                            }
                         }
                         else
                         {
-                            //Debug.Log("B");
-                            ResetIndex(1);
+                            ResetIndex();
                         }
-                    }
-                    else
-                    {
-                        ResetIndex();
                     }
                 }
             }
+            yield return null;
         }
     }
 

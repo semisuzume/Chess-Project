@@ -2,18 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 
 public class BoardManagement : MonoBehaviour
 {
+    /// <summary>
+    /// 順番:RNC
+    /// </summary>
     public static string[,] board = new string[8, 8];
     GameObject piece;
+    GameObject image;
+    GameManagement gameManagement;
+    Vector2Int topFloorTo;
 
     // Start is called before the first frame update
     void Start()
     {
+        image = GameObject.Find("Image");
+        gameManagement = gameObject.GetComponent<GameManagement>();
         Init();
         GeneratePiece();
+        image.SetActive(false);
         //Debug.Log(" ");
         //BoardPrint();
     }
@@ -21,7 +29,7 @@ public class BoardManagement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
     /// <summary>
     /// 盤面の配置の状況を初期状態に戻す
@@ -320,7 +328,7 @@ public class BoardManagement : MonoBehaviour
             }
 
             string rangeRank = board[movePos.y, movePos.x];
-            if(movePos == to)
+            if (movePos == to)
             {
                 return true;
             }
@@ -414,8 +422,7 @@ public class BoardManagement : MonoBehaviour
     /// <returns></returns>
     private bool CheckPawn(int player, Vector2Int frm, Vector2Int to)
     {
-        Debug.Log(frm + "|" + to);
-        //白ならば-1黒ならば1
+    　　//白ならば-1黒ならば1
         int direct = 1;
         if (player == 0)
         {
@@ -458,38 +465,59 @@ public class BoardManagement : MonoBehaviour
                     if (ChoicedCheck(player, 2, to))
                     {
                         Debug.Log("true");
-                        board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
+                        CheckPromotion(player, to);
                         return true;
                     }
                 }
-            }
+                else
+                {
+                    //1 ~ -1
+                    for (int di = -1; di <= 1; di += 2)
+                    {
+                        if (frm + new Vector2Int(di, 1) == to)
+                        {
+                            Debug.Log("true");
+                            CheckPromotion(player, to);
+                            return true;
+                        }
+                    }
+                }
+                return false;
         }
 
         Debug.Log("false");
         return false;
     }
-
-    //public void Promotion(int player, Vector2Int frm, Vector2Int to)
-    //{
-    //    int quantity;
-    //    if (player == 0)
-    //    {   
-    //        //相手陣地の端についたら
-    //        if (board[frm.y, frm.x].Substring(0, 1) == "P" && (0 < to.x) && (to.x < 8) && (to.y == 0))
-    //        {
-    //            Debug.Log("プロモーション");
-    //            if (Input.GetKey(KeyCode.P))
-    //            {
-    //                //何もなし
-    //            }
-    //            if (Input.GetKey(KeyCode.Q))
-    //            {
-    //                board[to.y, to.x] = "Q0W";
-    //            }
-    //            if(Input.GetKey(ke)
-    //        }
-    //    }
-    //}
+    //CheckPawn関数から呼び出す
+    private void CheckPromotion(int player, Vector2Int to)
+    {
+        //ポーンが盤面の端に到達したとき
+        if (to.y == 7 || to.y == 0)
+        {
+            image.SetActive(true);
+            topFloorTo = to;
+            gameManagement.F = true;
+            Debug.Log("Promotion");
+        }
+    }
+    public void Promotion(string rank)
+    {
+        image.SetActive(false);
+        int player = gameManagement.player;
+        string color = null;
+        if (player == 0)
+        {
+            color = "W";
+        }
+        else if(player == 1)
+        {
+            color = "B";
+        }
+        board[topFloorTo.y, topFloorTo.x] = rank + "0" + color;
+        Debug.Log(board[topFloorTo.y, topFloorTo.x]);
+        GeneratePiece();
+        gameManagement.F = false;
+    }
 
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
     {
