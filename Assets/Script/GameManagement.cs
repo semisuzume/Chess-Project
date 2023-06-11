@@ -33,9 +33,9 @@ public class GameManagement : MonoBehaviour
                 GameObject selectPiece = null;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    //�擾
+                    //駒の取得
                     selectPiece = hit.collider.gameObject;
-                    //�܂��ړ���������I��Ă��Ȃ��Ȃ�
+                    //pieceIndex二ナにも代入されていないなら
                     if (pieceIndex.x < 0 || pieceIndex.y < 0)
                     {
                         pieceIndex = selectPiece.GetComponent<Piece>().Select();
