@@ -16,13 +16,20 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CameraMove();
-        CameraParent();
-        CameraRotate();
-    }
+        parentPosition += new Vector3(
+              Input.GetAxisRaw("Horizontal"), 
+              Input.GetAxisRaw("Jump"), 
+              Input.GetAxisRaw("Vertical")
+          )/ 5;
+        if (gameObject.transform.position.y >= 3)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                i = -1;
+                parentPosition += new Vector3(0, i, 0) / 5;
+            }
+        }
 
-    private void CameraRotate()
-    {
         Vector2 screen_point;
         screen_point = Input.mousePosition;
         if (screen_point.y <= 0)
@@ -33,23 +40,7 @@ public class CameraManager : MonoBehaviour
         {
             transform.parent.Rotate(-0.5f, 0, 0);
         }
-    }
-    public void CameraMove()
-    {
-        parentPosition += new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0) / 5;
-        parentPosition += new Vector3(0, 0, Input.GetAxisRaw("Vertical")) / 5;
-        parentPosition += new Vector3(0, Input.GetAxisRaw("Jump")) / 5;
-        if (gameObject.transform.position.y >= 3)
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                i = -1;
-                parentPosition += new Vector3(0, i, 0) / 5;
-            }
-        }
-    }
-    private void CameraParent()
-    {
+
         transform.position = parentPosition;
     }
 }
