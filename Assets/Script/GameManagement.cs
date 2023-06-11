@@ -35,11 +35,11 @@ public class GameManagement : MonoBehaviour
                 {
                     //駒の取得
                     selectPiece = hit.collider.gameObject;
-                    //pieceIndex二ナにも代入されていないなら
+                    //pieceIndexに何も代入されていないなら
                     if (pieceIndex.x < 0 || pieceIndex.y < 0)
                     {
                         pieceIndex = selectPiece.GetComponent<Piece>().Select();
-                        //�I�����̂�"SS"������̂Ȃ烊�Z�b�g
+                        //選択した駒が自分の陣営ではない時選択した駒をリセットする
                         if (!boardManagement.CheckTurn(player, pieceIndex))
                         {
                             ResetIndex(0);
@@ -50,7 +50,7 @@ public class GameManagement : MonoBehaviour
                         choicedIndex = selectPiece.GetComponent<Piece>().Select();
                         if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
                         {
-                            //checkPown��
+                            //checkPown等
                             if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
                             {
                                 boardManagement.MovePiece(pieceIndex, choicedIndex);
