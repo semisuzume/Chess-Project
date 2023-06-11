@@ -21,7 +21,6 @@ public class Piece : MonoBehaviour
     void SetPosition(string argCamp, Vector2Int argIndex)
     {
         transform.position = Utility.Index2Coordinate(argIndex);
-        //Debug.Log(index.ToString() + "|" + Utillity.Coordinate2Index(this.gameObject.transform.position));
         if(argCamp == "B")
         {
             transform.localEulerAngles = new Vector3(0,180,0);
@@ -31,7 +30,6 @@ public class Piece : MonoBehaviour
     void SetPosition(Vector2Int argIndex)
     {
         transform.position = Utility.Index2Coordinate(argIndex);
-        //Debug.Log(index.ToString() + "|" + Utillity.Coordinate2Index(this.gameObject.transform.position));
     }
 
     public static void PieceMove(GameObject piece)
@@ -53,13 +51,11 @@ public class Piece : MonoBehaviour
             gameObject.transform.GetChild(2).GetComponent<Renderer>().material = argColor;
         }
         SetPosition(argCamp, argIndex);
-        //Debug.Log(argIndex.ToString() + "|" + Utility.Coordinate2Index(this.gameObject.transform.position));
     }
 
     public void Init(Vector2Int argIndex)
     {
         SetPosition(argIndex);
-        //Debug.Log(argIndex.ToString() + "|" + Utility.Coordinate2Index(this.gameObject.transform.position));
     }
 
     public Vector2Int Select()

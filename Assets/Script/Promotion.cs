@@ -21,7 +21,6 @@ public class Promotion : MonoBehaviour
     //‘I‘ğ¨
     public void PromotionButton()
     {
-        Debug.Log("Às‚³‚ê‚Ü‚µ‚½");
         boardManagement.Promotion(rank);
     }
 }

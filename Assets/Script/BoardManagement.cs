@@ -178,7 +178,6 @@ public class BoardManagement : MonoBehaviour
             {
                 printString += board[Y, X] + ",";
             }
-            Debug.Log(printString);
         }
     }
 
@@ -274,19 +273,14 @@ public class BoardManagement : MonoBehaviour
         switch (board[frm.y, frm.x].Substring(0, 1))
         {
             case "K":
-                Debug.Log(CheckKing(frm, to));
                 return CheckKing(frm, to);
             case "Q":
-                Debug.Log(CheckQueen(frm, to));
                 return CheckQueen(frm, to);
             case "L":
-                Debug.Log(CheckLuke(frm, to));
                 return CheckLuke(frm, to);
             case "B":
-                Debug.Log(CheckBishop(frm, to));
                 return CheckBishop(frm, to);
             case "N":
-                Debug.Log(CheckKnight(frm, to));
                 return CheckKnight(frm, to);
             case "P":
                 return CheckPawn(player, frm, to);
@@ -323,7 +317,6 @@ public class BoardManagement : MonoBehaviour
             //Debug.Log(movePos.x + "|" + movePos.y);
             if (!(0 <= movePos.x && movePos.x < 8 && 0 <= movePos.y && movePos.y < 8))
             {
-                Debug.Log("配列外です");
                 return false;
             }
 
@@ -334,7 +327,6 @@ public class BoardManagement : MonoBehaviour
             }
             else if (rangeRank != "SS")
             {
-                Debug.Log("妨害されました");
                 return false;
             }
         }
@@ -349,10 +341,8 @@ public class BoardManagement : MonoBehaviour
         {
             //direct 0~7
             int radian = direct * 45;
-            //Debug.Log(radian);
             int sign_x = (int)Math.Round(Math.Cos(radian * (Math.PI / 180)));
             int sign_y = (int)Math.Round(Math.Sin(radian * (Math.PI / 180)));
-            Debug.Log(sign_x.ToString() + ", " + sign_y.ToString());
             flg |= Direct(sign_x, sign_y, frm, to);
         }
 
@@ -428,6 +418,10 @@ public class BoardManagement : MonoBehaviour
         {
             direct = -1;
         }
+        else if(player == 1)
+        {
+            direct = 1;
+        }
 
         //配列のデータが４文字どうかで一度も動いていないかを判別する
         if (board[frm.y, frm.x].Length == 4)
@@ -437,7 +431,6 @@ public class BoardManagement : MonoBehaviour
             {
                 if (ChoicedCheck(player, 1, to))
                 {
-                    Debug.Log("true");
                     board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
                     return true;
                 }
@@ -448,7 +441,6 @@ public class BoardManagement : MonoBehaviour
         {
             if (ChoicedCheck(player, 1, to))
             {
-                Debug.Log("true");
                 board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
                 return true;
             }
@@ -459,33 +451,17 @@ public class BoardManagement : MonoBehaviour
             //1 ~ -1
             for (int di = -1; di <= 1; di += 2)
             {
+                //白黒両用
                 if (frm + new Vector2Int(di, 1 * direct) == to)
                 {
-                    Debug.Log("成功");
                     if (ChoicedCheck(player, 2, to))
                     {
-                        Debug.Log("true");
                         CheckPromotion(player, to);
                         return true;
                     }
                 }
-                else
-                {
-                    //1 ~ -1
-                    for (int di = -1; di <= 1; di += 2)
-                    {
-                        if (frm + new Vector2Int(di, 1) == to)
-                        {
-                            Debug.Log("true");
-                            CheckPromotion(player, to);
-                            return true;
-                        }
-                    }
-                }
-                return false;
+            }
         }
-
-        Debug.Log("false");
         return false;
     }
     //CheckPawn関数から呼び出す
@@ -497,7 +473,6 @@ public class BoardManagement : MonoBehaviour
             image.SetActive(true);
             topFloorTo = to;
             gameManagement.F = true;
-            Debug.Log("Promotion");
         }
     }
     public void Promotion(string rank)
@@ -514,7 +489,6 @@ public class BoardManagement : MonoBehaviour
             color = "B";
         }
         board[topFloorTo.y, topFloorTo.x] = rank + "0" + color;
-        Debug.Log(board[topFloorTo.y, topFloorTo.x]);
         GeneratePiece();
         gameManagement.F = false;
     }
