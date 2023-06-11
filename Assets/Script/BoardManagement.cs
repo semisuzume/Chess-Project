@@ -428,6 +428,10 @@ public class BoardManagement : MonoBehaviour
         {
             direct = -1;
         }
+        else if(player == 1)
+        {
+            direct = 1;
+        }
 
         //配列のデータが４文字どうかで一度も動いていないかを判別する
         if (board[frm.y, frm.x].Length == 4)
@@ -437,7 +441,6 @@ public class BoardManagement : MonoBehaviour
             {
                 if (ChoicedCheck(player, 1, to))
                 {
-                    Debug.Log("true");
                     board[frm.y, frm.x] = board[frm.y, frm.x].Substring(0, 3);
                     return true;
                 }
@@ -459,9 +462,9 @@ public class BoardManagement : MonoBehaviour
             //1 ~ -1
             for (int di = -1; di <= 1; di += 2)
             {
+                //白黒両用
                 if (frm + new Vector2Int(di, 1 * direct) == to)
                 {
-                    Debug.Log("成功");
                     if (ChoicedCheck(player, 2, to))
                     {
                         Debug.Log("true");
@@ -469,22 +472,8 @@ public class BoardManagement : MonoBehaviour
                         return true;
                     }
                 }
-                else
-                {
-                    //1 ~ -1
-                    for (int di = -1; di <= 1; di += 2)
-                    {
-                        if (frm + new Vector2Int(di, 1) == to)
-                        {
-                            Debug.Log("true");
-                            CheckPromotion(player, to);
-                            return true;
-                        }
-                    }
-                }
-                return false;
+            }
         }
-
         Debug.Log("false");
         return false;
     }
