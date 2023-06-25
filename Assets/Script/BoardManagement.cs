@@ -493,6 +493,16 @@ public class BoardManagement : MonoBehaviour
         gameManagement.F = false;
     }
 
+    public bool EndJudgment(Vector2Int choicedIndex)
+    {
+        if(board[choicedIndex.y,choicedIndex.x].Substring(0,1) == "K")
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     public void MovePiece(Vector2Int pieceIndex, Vector2Int choicedIndex)
     {
         string selectedPieceString = board[pieceIndex.y, pieceIndex.x];
