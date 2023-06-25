@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameManagement : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class GameManagement : MonoBehaviour
     private Vector2Int choicedIndex = new Vector2Int(-1, -1);
     public int player = 0;
     public bool F;
+    public Material colorChange;
 
     // Start is called before the first frame update
     void Start()
     {
         boardManagement = GetComponent<BoardManagement>();
+        colorChange = GameObject.Find("Cube").GetComponent<MeshRenderer>().material;
         StartCoroutine("Select");
         F = false;
     }
@@ -44,6 +47,12 @@ public class GameManagement : MonoBehaviour
                         {
                             ResetIndex(0);
                         }
+                        else
+                        {
+                            selectPiece.AddComponent<Outline>();
+                            selectPiece.GetComponent<Outline>().OutlineColor = Color.red;
+                            selectPiece.GetComponent<Outline>().OutlineWidth = 6;
+                        }
                     }
                     else if (choicedIndex.x < 0 || choicedIndex.y < 0)
                     {
@@ -58,6 +67,7 @@ public class GameManagement : MonoBehaviour
                                 {
                                     yield return null;
                                 }
+                                Destroy(GetComponent<Outline>());
                                 ResetIndex();
                                 ChangePlayer();
                             }
@@ -77,6 +87,19 @@ public class GameManagement : MonoBehaviour
         }
     }
 
+    private void ColorChange(int player)
+    {
+        if(player == 0)
+        {
+            colorChange.color = Color.white;
+        }
+        else
+        {
+            colorChange.color = Color.black;
+        }
+
+    }
+
     private void ChangePlayer()
     {
         if (player == 0)
@@ -87,6 +110,8 @@ public class GameManagement : MonoBehaviour
         {
             player = 0;
         }
+
+        ColorChange(player);
 
         /*
 			player = 1 - player;
