@@ -59,21 +59,29 @@ public class GameManagement : MonoBehaviour
                         choicedIndex = selectPiece.GetComponent<Piece>().Select();
                         if (boardManagement.ChoicedCheck(player, 0, choicedIndex))
                         {
-                            //checkPown等
-                            if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                            if (boardManagement.EndJudgment(choicedIndex))
                             {
+                                Debug.Log("チェックメイト");
                                 boardManagement.MovePiece(pieceIndex, choicedIndex);
-                                while (F == true)
-                                {
-                                    yield return null;
-                                }
-                                Destroy(GetComponent<Outline>());
-                                ResetIndex();
-                                ChangePlayer();
                             }
                             else
                             {
-                                ResetIndex(1);
+                                //checkPown等
+                                if (boardManagement.CheckMovePoss(player, pieceIndex, choicedIndex))
+                                {
+                                    boardManagement.MovePiece(pieceIndex, choicedIndex);
+                                    while (F == true)
+                                    {
+                                        yield return null;
+                                    }
+                                    Destroy(GetComponent<Outline>());
+                                    ResetIndex();
+                                    ChangePlayer();
+                                }
+                                else
+                                {
+                                    ResetIndex(1);
+                                }
                             }
                         }
                         else
